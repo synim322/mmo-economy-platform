@@ -1,0 +1,52 @@
+# Visual Studio user files
+.vs/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Visual Studio database files
+*.VC.db
+*.VC.opendb
+*.ipch
+
+# Build folders
+Debug/
+Release/
+x64/
+x86/
+Win32/
+ARM/
+ARM64/
+build/
+out/
+cmake-build-*/
+
+# Build artifacts
+*.obj
+*.exe
+*.pdb
+*.ilk
+*.idb
+*.tlog
+*.lastbuildstate
+*.log
+
+# CMake files
+CMakeFiles/
+CMakeCache.txt
+cmake_install.cmake
+
+# Temporary files
+*.tmp
+*.temp
+*.bak
+
+# Obsidian local workspace settings
+docs/obsidian/.obsidian/workspace.json
+docs/obsidian/.obsidian/workspace-mobile.json
+
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
