@@ -35,7 +35,7 @@ void Wallet::Deposit(int amount)
 
 bool Wallet::Withdraw(int amount)
 {
-	if (amount < MinAmount || !CanSpend(amount))
+	if (!CanSpend(amount))
 	{
 		return false;
 	}

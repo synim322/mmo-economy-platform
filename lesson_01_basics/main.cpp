@@ -77,6 +77,8 @@ int main()
 		std::cout << "Withdrawal failed" << "\n";
 	}
 
+	agent1.PrintInfo();
+
 	return 0;
 }
 

@@ -43,14 +43,7 @@ void Agent::Deposit(int amount)
 
 bool Agent::Withdraw(int amount)
 {
-	if (wallet.Withdraw(amount))
-	{
-		return true;
-	}
-	else
-	{
-		return false;
-	}
+	return wallet.Withdraw(amount);
 }
 
 void Agent::PrintInfo() const
