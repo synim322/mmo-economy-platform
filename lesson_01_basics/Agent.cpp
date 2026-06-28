@@ -1,12 +1,11 @@
 #include "Agent.h"
-#include "Wallet.h"
 #include <iostream>
 
 Agent::Agent(int agentId, const std::string& agentName, int initialBalance) : id{ agentId }, nameAgent{ agentName }, wallet{ initialBalance }
 {
 	if (agentName.empty())
 	{
-		nameAgent = "DefaultAgent";
+		nameAgent = DefaultName;
 	}
 
 	if (agentId < MinId)
@@ -42,9 +41,16 @@ void Agent::Deposit(int amount)
 	wallet.Deposit(amount);
 }
 
-void Agent::Withdraw(int amount)
+bool Agent::Withdraw(int amount)
 {
-	wallet.Withdraw(amount);
+	if (wallet.Withdraw(amount))
+	{
+		return true;
+	}
+	else
+	{
+		return false;
+	}
 }
 
 void Agent::PrintInfo() const

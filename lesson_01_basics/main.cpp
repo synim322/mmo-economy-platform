@@ -50,16 +50,32 @@ int main()
 	
 	Agent agent1(1, "Agent1", 100);
 
-	agent1.PrintInfo();
-	agent1.Deposit(50);
-	agent1.PrintInfo();
-	agent1.Withdraw(30);
-	agent1.PrintInfo();
-	agent1.Withdraw(10000); // Attempt to withdraw more than the balance
-	agent1.PrintInfo();
+	if (agent1.Withdraw(30))
+	{
+		std::cout << "Withdrawal successful" << "\n";
+	}
+	else
+	{
+		std::cout << "Withdrawal failed" << "\n";
+	}
+
+	if (agent1.Withdraw(10000))
+	{
+		std::cout << "Withdrawal successful" << "\n";
+	}
+	else
+	{
+		std::cout << "Withdrawal failed" << "\n";
+	}
 	
-	Agent agent2(2, "", -50); // Invalid name and initial balance
-	agent2.PrintInfo();
+	if (agent1.Withdraw(0))
+	{
+		std::cout << "Withdrawal successful" << "\n";
+	}
+	else
+	{
+		std::cout << "Withdrawal failed" << "\n";
+	}
 
 	return 0;
 }

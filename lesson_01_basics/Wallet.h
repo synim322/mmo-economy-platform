@@ -13,7 +13,7 @@ public:
 
 	int GetBalance() const;
 	void Deposit(int amount);
-	void Withdraw(int amount);
+	bool Withdraw(int amount);
 	bool CanSpend(int amount) const;
 	void PrintBalance() const;
 };
