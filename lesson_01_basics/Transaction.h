@@ -1,10 +1,12 @@
 #pragma once
 
-enum class Status
+enum class TransactionStatus
 {
 	Pending,
 	Completed,
-	Failed
+	InvalidParticipants,
+	InsufficientFunds,
+	InvalidAmount,
 };
 
 class Agent; // Forward declaration of Agent class
@@ -19,8 +21,9 @@ private:
 	int senderId;
 	int recipientId;
 
-	Status status;
+	TransactionStatus status;
 
+	static constexpr int InvalidAgentId = -1;
 public:
 	Transaction(Agent* sender, Agent* recipient, int amount, int transactionId);
 	~Transaction();
@@ -28,7 +31,7 @@ public:
 	void ProcessTransaction();
 	void PrintTransactionInfo() const;
 
-	Status GetStatus() const;
+	TransactionStatus GetStatus() const;
 	int GetTransactionId() const;
 	int GetSenderId() const;
 	int GetRecipientId() const;

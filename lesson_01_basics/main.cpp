@@ -55,8 +55,21 @@ int main()
 	Transaction transaction(&agent1, &agent2, 30, 1);
 
 	transaction.ProcessTransaction();
-
 	transaction.PrintTransactionInfo();
+	agent1.PrintInfo();
+	agent2.PrintInfo();
+
+	Transaction transaction2(&agent1, &agent2, 10000, 2); // Insufficient funds
+
+	transaction2.ProcessTransaction();
+	transaction2.PrintTransactionInfo();
+	agent1.PrintInfo();
+	agent2.PrintInfo();
+
+	Transaction transaction3(&agent1, &agent2, 0, 3); // Invalid amount
+
+	transaction3.ProcessTransaction();
+	transaction3.PrintTransactionInfo();
 	agent1.PrintInfo();
 	agent2.PrintInfo();
 

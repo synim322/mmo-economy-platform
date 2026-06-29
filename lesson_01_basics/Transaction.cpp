@@ -2,27 +2,44 @@
 #include <iostream>
 #include "Agent.h"
 
-const char* StatusToString(Status status)
+const char* StatusToString(TransactionStatus status)
 {
 	switch (status)
 	{
-	case Status::Pending:
+	case TransactionStatus::Pending:
 		return "Pending";
-	case Status::Completed:
+	case TransactionStatus::Completed:
 		return "Completed";
-	case Status::Failed:
-		return "Failed";
+	case TransactionStatus::InvalidParticipants:
+		return "InvalidParticipants";
+	case TransactionStatus::InsufficientFunds:
+		return "InsufficientFunds";
+	case TransactionStatus::InvalidAmount:
+		return "InvalidAmount";
 	default:
 		return "Unknown";
 	}
 }
 
-Transaction::Transaction(Agent* sender, Agent* recipient, int amount, int transactionId) : sender(sender), recipient(recipient), amount(amount), transactionId(transactionId), status(Status::Pending)
+Transaction::Transaction(Agent* sender, Agent* recipient, int amount, int transactionId) : sender(sender), recipient(recipient), amount(amount), transactionId(transactionId), status(TransactionStatus::Pending)
 {
 	if (sender)
+	{
 		senderId = sender->GetId();
+	}
+	else
+	{
+		senderId = InvalidAgentId; // or some default value indicating no sender
+	}
+
 	if (recipient)
+	{
 		recipientId = recipient->GetId();
+	}
+	else
+	{
+		recipientId = InvalidAgentId; // or some default value indicating no recipient
+	}
 }
 
 Transaction::~Transaction()
@@ -33,19 +50,26 @@ void Transaction::ProcessTransaction()
 {
 	if (sender && recipient)
 	{
-		if (sender->Withdraw(amount))
+		if (amount <= 0)
 		{
-			recipient->Deposit(amount);
-			status = Status::Completed;
+			status = TransactionStatus::InvalidAmount;
 		}
 		else
 		{
-			status = Status::Failed;
+			if (sender->Withdraw(amount))
+			{
+				recipient->Deposit(amount);
+				status = TransactionStatus::Completed;
+			}
+			else
+			{
+				status = TransactionStatus::InsufficientFunds;
+			}
 		}
 	}
 	else
 	{
-		status = Status::Failed;
+		status = TransactionStatus::InvalidParticipants;
 	}
 }
 
@@ -58,7 +82,7 @@ void Transaction::PrintTransactionInfo() const
 	std::cout << "Status: " << StatusToString(status) << "\n";
 }
 
-Status Transaction::GetStatus() const
+TransactionStatus Transaction::GetStatus() const
 {
 	return status;
 }
