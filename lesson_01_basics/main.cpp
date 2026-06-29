@@ -52,30 +52,31 @@ int main()
 	Agent agent1(1, "Agent1", 100);
 	Agent agent2(2, "Agent2", 50);
 
-	Transaction transaction(&agent1, &agent2, 30, 1);
+	Transaction transaction(&agent1, &agent2, 1, 30);
 
-	transaction.ProcessTransaction();
+	TransactionResult result1 = transaction.ProcessTransaction();
 	agent1.PrintInfo();
 	agent2.PrintInfo();	
-	transaction.PrintTransactionInfo();
+	transaction.PrintTransactionResult(result1);
 
-	transaction.ProcessTransaction(); // Attempt to process the same transaction again
+	TransactionResult result1Repeat = transaction.ProcessTransaction(); // Attempt to process the same transaction again
 	agent1.PrintInfo();
 	agent2.PrintInfo();
-	transaction.PrintTransactionInfo();
+	transaction.PrintTransactionResult(result1Repeat);
 
-	Transaction transaction2(&agent1, &agent2, 10000, 2); // Insufficient funds
+	Transaction transaction2(&agent1, &agent2, 2, 10000); // Insufficient funds
 
-	transaction2.ProcessTransaction();
+	TransactionResult result2 = transaction2.ProcessTransaction();
 	agent1.PrintInfo();
 	agent2.PrintInfo();
-	transaction2.PrintTransactionInfo();
+	transaction2.PrintTransactionResult(result2);
 
-	Transaction transaction3(&agent1, &agent2, 0, 3); // Invalid amount
-	transaction3.ProcessTransaction();
+	Transaction transaction3(&agent1, &agent2, 3, 0); // Invalid amount
+
+	TransactionResult result3 = transaction3.ProcessTransaction();
 	agent1.PrintInfo();
 	agent2.PrintInfo();
-	transaction3.PrintTransactionInfo();
+	transaction3.PrintTransactionResult(result3);
 
 	return 0;
 }
