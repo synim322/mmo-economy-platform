@@ -33,18 +33,18 @@ void Wallet::Deposit(int amount)
 	}
 }
 
-bool Wallet::Withdraw(int amount)
+void Wallet::Withdraw(int amount)
 {
-	if (!CanSpend(amount))
+	if (amount < MinAmount || !CanSpend(amount))
 	{
-		return false;
+		return;
 	}
 	else
 	{
 		balance -= amount;
 	}
 
-	return true;
+	return;
 }
 
 bool Wallet::CanSpend(int amount) const
