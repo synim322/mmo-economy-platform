@@ -36,7 +36,6 @@ public:
 	~Transaction();
 
 	TransactionResult ProcessTransaction();
-	void PrintTransactionResult(const TransactionResult& result) const;
 
 	TransactionStatus GetStatus() const;
 	int GetTransactionId() const;
