@@ -48,28 +48,31 @@ Transaction::~Transaction()
 
 void Transaction::ProcessTransaction()
 {
-	if (sender && recipient)
+	if (status == TransactionStatus::Pending)
 	{
-		if (amount <= 0)
+		if (sender && recipient)
 		{
-			status = TransactionStatus::InvalidAmount;
-		}
-		else
-		{
-			if (sender->Withdraw(amount))
+			if (amount <= 0)
 			{
-				recipient->Deposit(amount);
-				status = TransactionStatus::Completed;
+				status = TransactionStatus::InvalidAmount;
 			}
 			else
 			{
-				status = TransactionStatus::InsufficientFunds;
+				if (sender->Withdraw(amount))
+				{
+					recipient->Deposit(amount);
+					status = TransactionStatus::Completed;
+				}
+				else
+				{
+					status = TransactionStatus::InsufficientFunds;
+				}
 			}
 		}
-	}
-	else
-	{
-		status = TransactionStatus::InvalidParticipants;
+		else
+		{
+			status = TransactionStatus::InvalidParticipants;
+		}
 	}
 }
 
