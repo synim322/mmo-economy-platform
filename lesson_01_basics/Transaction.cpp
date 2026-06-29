@@ -21,87 +21,110 @@ const char* StatusToString(TransactionStatus status)
 	}
 }
 
-Transaction::Transaction(Agent* sender, Agent* recipient, int amount, int transactionId) : sender(sender), recipient(recipient), amount(amount), transactionId(transactionId), status(TransactionStatus::Pending)
+Transaction::Transaction(Agent* sender, Agent* recipient, int transactionId, int amount) : sender (sender), recipient (recipient)
 {
 	if (sender)
 	{
-		senderId = sender->GetId();
+		result.senderId= sender->GetId();
 	}
 	else
 	{
-		senderId = InvalidAgentId; // or some default value indicating no sender
+		result.senderId = InvalidAgentId;
 	}
 
 	if (recipient)
 	{
-		recipientId = recipient->GetId();
+		result.recipientId = recipient->GetId();
 	}
 	else
 	{
-		recipientId = InvalidAgentId; // or some default value indicating no recipient
+		result.recipientId = InvalidAgentId;
 	}
+
+	result.status = TransactionStatus::Pending;
+
+	result.message = "Transaction created";
+
+	result.amount = amount;
+
+	result.transactionId = transactionId;
 }
 
 Transaction::~Transaction()
 {
 }
 
-void Transaction::ProcessTransaction()
+TransactionResult Transaction::ProcessTransaction()
 {
-	if (status == TransactionStatus::Pending)
+	if (result.status != TransactionStatus::Pending)
 	{
-		if (sender && recipient)
+		result.message = "Transaction already processed";
+		return result;
+	}
+	if (sender && recipient)
+	{
+		if (result.amount <= 0)
 		{
-			if (amount <= 0)
-			{
-				status = TransactionStatus::InvalidAmount;
-			}
-			else
-			{
-				if (sender->Withdraw(amount))
-				{
-					recipient->Deposit(amount);
-					status = TransactionStatus::Completed;
-				}
-				else
-				{
-					status = TransactionStatus::InsufficientFunds;
-				}
-			}
+			result.status = TransactionStatus::InvalidAmount;
+			result.message = "Invalid amount";
+			
+			return result;
 		}
 		else
 		{
-			status = TransactionStatus::InvalidParticipants;
+			if (sender->Withdraw(result.amount))
+			{
+				recipient->Deposit(result.amount);
+				result.status = TransactionStatus::Completed;
+				result.message = "Transaction completed";
+
+				return result;
+			}
+			else
+			{
+				result.status = TransactionStatus::InsufficientFunds;
+				result.message = "Insufficient funds";
+
+				return result;
+			}
 		}
-	}
+		}
+		else
+		{
+			result.status = TransactionStatus::InvalidParticipants;
+			result.message = "Invalid participants";
+
+			return result;
+		}
 }
 
-void Transaction::PrintTransactionInfo() const
+void Transaction::PrintTransactionResult(const TransactionResult& result) const
 {
-	std::cout << "Transaction ID: " << transactionId << "\n";
-	std::cout << "Sender ID: " << senderId << "\n";
-	std::cout << "Recipient ID: " << recipientId << "\n";
-	std::cout << "Amount: " << amount << "\n";
-	std::cout << "Status: " << StatusToString(status) << "\n";
+	std::cout << "Transaction ID: " << result.transactionId << "\n";
+	std::cout << "Sender ID: " << result.senderId << "\n";
+	std::cout << "Recipient ID: " << result.recipientId << "\n";
+	std::cout << "Amount: " << result.amount << "\n";
+	std::cout << "Status: " << StatusToString(result.status) << "\n";
+	std::cout << "Status message: " << result.message << "\n";
 }
 
 TransactionStatus Transaction::GetStatus() const
 {
-	return status;
+	return result.status;
 }
 
 int Transaction::GetTransactionId() const
 {
-	return transactionId;
+	return result.transactionId;
 }
 
 int Transaction::GetSenderId() const
 {
-	return senderId;
+	return result.senderId;
 }
 
 int Transaction::GetRecipientId() const
 {
-	return recipientId;
+	return result.recipientId;
 }
 

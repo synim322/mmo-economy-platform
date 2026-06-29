@@ -1,4 +1,5 @@
 #pragma once
+#include <string>
 
 enum class TransactionStatus
 {
@@ -9,6 +10,16 @@ enum class TransactionStatus
 	InvalidAmount,
 };
 
+struct TransactionResult
+{
+	int transactionId;
+	int senderId;
+	int recipientId;
+	int amount;
+	TransactionStatus status;
+	std::string  message;
+};
+
 class Agent; // Forward declaration of Agent class
 
 class Transaction
@@ -16,20 +27,16 @@ class Transaction
 private:
 	Agent* sender;
 	Agent* recipient;
-	int amount;
-	int transactionId;
-	int senderId;
-	int recipientId;
-
-	TransactionStatus status;
+	
+	TransactionResult result;
 
 	static constexpr int InvalidAgentId = -1;
 public:
-	Transaction(Agent* sender, Agent* recipient, int amount, int transactionId);
+	Transaction(Agent* sender, Agent* recipient, int transactionId, int amount);
 	~Transaction();
 
-	void ProcessTransaction();
-	void PrintTransactionInfo() const;
+	TransactionResult ProcessTransaction();
+	void PrintTransactionResult(const TransactionResult& result) const;
 
 	TransactionStatus GetStatus() const;
 	int GetTransactionId() const;
