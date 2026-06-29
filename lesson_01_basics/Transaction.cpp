@@ -1,25 +1,5 @@
 #include "Transaction.h"
-#include <iostream>
 #include "Agent.h"
-
-const char* StatusToString(TransactionStatus status)
-{
-	switch (status)
-	{
-	case TransactionStatus::Pending:
-		return "Pending";
-	case TransactionStatus::Completed:
-		return "Completed";
-	case TransactionStatus::InvalidParticipants:
-		return "InvalidParticipants";
-	case TransactionStatus::InsufficientFunds:
-		return "InsufficientFunds";
-	case TransactionStatus::InvalidAmount:
-		return "InvalidAmount";
-	default:
-		return "Unknown";
-	}
-}
 
 Transaction::Transaction(Agent* sender, Agent* recipient, int transactionId, int amount) : sender (sender), recipient (recipient)
 {
@@ -93,16 +73,6 @@ TransactionResult Transaction::ProcessTransaction()
 
 		return result;
 	}
-}
-
-void Transaction::PrintTransactionResult(const TransactionResult& result) const
-{
-	std::cout << "Transaction ID: " << result.transactionId << "\n";
-	std::cout << "Sender ID: " << result.senderId << "\n";
-	std::cout << "Recipient ID: " << result.recipientId << "\n";
-	std::cout << "Amount: " << result.amount << "\n";
-	std::cout << "Status: " << StatusToString(result.status) << "\n";
-	std::cout << "Status message: " << result.message << "\n";
 }
 
 TransactionStatus Transaction::GetStatus() const
