@@ -61,41 +61,38 @@ TransactionResult Transaction::ProcessTransaction()
 		result.message = "Transaction already processed";
 		return result;
 	}
-	if (sender && recipient)
+
+	if (!sender || !recipient)
 	{
-		if (result.amount <= 0)
-		{
-			result.status = TransactionStatus::InvalidAmount;
-			result.message = "Invalid amount";
+		result.status = TransactionStatus::InvalidParticipants;
+		result.message = "Invalid participants";
+
+		return result;
+	}
+
+	if (result.amount <= 0)
+	{
+		result.status = TransactionStatus::InvalidAmount;
+		result.message = "Invalid amount";
 			
-			return result;
-		}
-		else
-		{
-			if (sender->Withdraw(result.amount))
-			{
-				recipient->Deposit(result.amount);
-				result.status = TransactionStatus::Completed;
-				result.message = "Transaction completed";
+		return result;
+	}
+	
+	if (!sender->Withdraw(result.amount))
+	{
+		result.status = TransactionStatus::InsufficientFunds;
+		result.message = "Insufficient funds";
 
-				return result;
-			}
-			else
-			{
-				result.status = TransactionStatus::InsufficientFunds;
-				result.message = "Insufficient funds";
+		return result;
+	}
+	else
+	{
+		recipient->Deposit(result.amount);
+		result.status = TransactionStatus::Completed;
+		result.message = "Transaction completed";
 
-				return result;
-			}
-		}
-		}
-		else
-		{
-			result.status = TransactionStatus::InvalidParticipants;
-			result.message = "Invalid participants";
-
-			return result;
-		}
+		return result;
+	}
 }
 
 void Transaction::PrintTransactionResult(const TransactionResult& result) const
