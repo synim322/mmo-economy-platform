@@ -78,6 +78,25 @@ int main()
 	agent2.PrintInfo();
 	transaction3.PrintTransactionResult(result3);
 
+	Transaction transaction4(nullptr, &agent2, 4, 20);
+
+	TransactionResult result4 = transaction4.ProcessTransaction();
+	agent2.PrintInfo();
+	transaction4.PrintTransactionResult(result4);
+
+
+	Transaction transaction5(&agent1, nullptr, 5, 20);
+
+	TransactionResult result5 = transaction5.ProcessTransaction();
+	agent1.PrintInfo();
+	transaction5.PrintTransactionResult(result5);
+
+
+	Transaction transaction6(nullptr, nullptr, 6, 20);
+
+	TransactionResult result6 = transaction6.ProcessTransaction();
+	transaction6.PrintTransactionResult(result6);
+
 	return 0;
 }
 
