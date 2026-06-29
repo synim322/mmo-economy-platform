@@ -3,6 +3,7 @@
 #include "Player.h"
 #include "Wallet.h"
 #include "Agent.h"
+#include "Transaction.h"
 
 /*
 void PrintPlayerInfo(const Player& player)
@@ -49,17 +50,33 @@ int main()
 	//PrintPlayerInfo2(originalPlayer);
 	
 	Agent agent1(1, "Agent1", 100);
+	Agent agent2(2, "Agent2", 50);
 
+	Transaction transaction(&agent1, &agent2, 1, 30);
+
+	TransactionResult result1 = transaction.ProcessTransaction();
 	agent1.PrintInfo();
-	agent1.Deposit(50);
+	agent2.PrintInfo();	
+	transaction.PrintTransactionResult(result1);
+
+	TransactionResult result1Repeat = transaction.ProcessTransaction(); // Attempt to process the same transaction again
 	agent1.PrintInfo();
-	agent1.Withdraw(30);
-	agent1.PrintInfo();
-	agent1.Withdraw(10000); // Attempt to withdraw more than the balance
-	agent1.PrintInfo();
-	
-	Agent agent2(2, "", -50); // Invalid name and initial balance
 	agent2.PrintInfo();
+	transaction.PrintTransactionResult(result1Repeat);
+
+	Transaction transaction2(&agent1, &agent2, 2, 10000); // Insufficient funds
+
+	TransactionResult result2 = transaction2.ProcessTransaction();
+	agent1.PrintInfo();
+	agent2.PrintInfo();
+	transaction2.PrintTransactionResult(result2);
+
+	Transaction transaction3(&agent1, &agent2, 3, 0); // Invalid amount
+
+	TransactionResult result3 = transaction3.ProcessTransaction();
+	agent1.PrintInfo();
+	agent2.PrintInfo();
+	transaction3.PrintTransactionResult(result3);
 
 	return 0;
 }
