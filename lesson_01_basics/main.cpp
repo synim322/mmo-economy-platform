@@ -3,6 +3,7 @@
 #include "Player.h"
 #include "Wallet.h"
 #include "Agent.h"
+#include "Transaction.h"
 
 /*
 void PrintPlayerInfo(const Player& player)
@@ -49,35 +50,28 @@ int main()
 	//PrintPlayerInfo2(originalPlayer);
 	
 	Agent agent1(1, "Agent1", 100);
+	Agent agent2(2, "Agent2", 50);
 
-	if (agent1.Withdraw(30))
-	{
-		std::cout << "Withdrawal successful" << "\n";
-	}
-	else
-	{
-		std::cout << "Withdrawal failed" << "\n";
-	}
+	Transaction transaction(&agent1, &agent2, 30, 1);
 
-	if (agent1.Withdraw(10000))
-	{
-		std::cout << "Withdrawal successful" << "\n";
-	}
-	else
-	{
-		std::cout << "Withdrawal failed" << "\n";
-	}
-	
-	if (agent1.Withdraw(0))
-	{
-		std::cout << "Withdrawal successful" << "\n";
-	}
-	else
-	{
-		std::cout << "Withdrawal failed" << "\n";
-	}
-
+	transaction.ProcessTransaction();
+	transaction.PrintTransactionInfo();
 	agent1.PrintInfo();
+	agent2.PrintInfo();
+
+	Transaction transaction2(&agent1, &agent2, 10000, 2); // Insufficient funds
+
+	transaction2.ProcessTransaction();
+	transaction2.PrintTransactionInfo();
+	agent1.PrintInfo();
+	agent2.PrintInfo();
+
+	Transaction transaction3(&agent1, &agent2, 0, 3); // Invalid amount
+
+	transaction3.ProcessTransaction();
+	transaction3.PrintTransactionInfo();
+	agent1.PrintInfo();
+	agent2.PrintInfo();
 
 	return 0;
 }
